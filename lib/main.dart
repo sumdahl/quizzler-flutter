@@ -29,9 +29,6 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
 
-  int questionNumber = 0;
-
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -44,7 +41,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-               quizBrain.questionBank[questionNumber].questionText,
+               quizBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -68,14 +65,14 @@ class _QuizPageState extends State<QuizPage> {
               style: TextButton.styleFrom(backgroundColor: Colors.green),
               //The user picked true
               onPressed: () {
-              bool correctAnswer = quizBrain.questionBank[questionNumber].questionAnswer;
+              bool correctAnswer = quizBrain.getCorrectAnswer();
               if(correctAnswer == true){
                 print('You got it right');
               } else {
                 print('You got it wrong');
               }
                 setState(() {
-                  questionNumber++;
+                  quizBrain.nextQuestion();
                 });
               },
             ),
@@ -96,14 +93,14 @@ class _QuizPageState extends State<QuizPage> {
                 backgroundColor: Colors.red,
               ),
               onPressed: () {
-                bool correctAnswer = quizBrain.questionBank[questionNumber].questionAnswer;
+                bool correctAnswer = quizBrain.getCorrectAnswer();
                 if(correctAnswer == false){
                   print('You got it right');
                 } else {
                   print('You got it wrong');
                 }
                 setState(() {
-                  questionNumber++;
+                  quizBrain.nextQuestion();
                 });
               },
             ),

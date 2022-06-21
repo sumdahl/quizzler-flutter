@@ -1,4 +1,4 @@
-#Sun Jun 19 22:35:21 NPT 2022
+#Tue Jun 21 18:50:38 NPT 2022
 base.0=/home/sumdahl/StudioProjects/quizzler-flutter/build/app/intermediates/dex/debug/mergeDexDebug/out/classes.dex
 renamed.0=classes.dex
 path.0=classes.dex
