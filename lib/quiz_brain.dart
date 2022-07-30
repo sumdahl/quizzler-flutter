@@ -1,6 +1,8 @@
+import 'package:flutter/material.dart';
 import 'package:quizzler/question.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
-class QuizBrain{
+class QuizBrain {
   int _questionNumber = 0;
   List<Question> _questionBank = [
     Question('Some cats are actually allergic to humans', true),
@@ -29,17 +31,31 @@ class QuizBrain{
         'In West Virginia, USA, if you accidentally hit an animal with your car, you are free to take it home to eat.',
         true),
   ];
-  void nextQuestion(){
-    if (_questionNumber < _questionBank.length - 1){
+  void nextQuestion() {
+    if (_questionNumber <= _questionBank.length - 1) {
       _questionNumber++;
     }
-    }
+  }
 
   //Encapsulation
-  String getQuestionText(){
-   return _questionBank[_questionNumber].questionText; //index of _questionBank, questionText parameter of class Question
+  String getQuestionText() {
+    return _questionBank[_questionNumber]
+        .questionText; //index of _questionBank, questionText parameter of class Question
   }
-  bool getCorrectAnswer(){
-    return _questionBank[_questionNumber].questionAnswer; //index of _questionBank, questionAnswer parameter of class Question
+
+  bool getCorrectAnswer() {
+    return _questionBank[_questionNumber]
+        .questionAnswer; //index of _questionBank, questionAnswer parameter of class Question
+  }
+
+  bool isQuizFinished() {
+    return _questionNumber >= _questionBank.length - 1;
+  }
+
+  void reset() {
+    _questionNumber = 0;
   }
 }
+
+//TODO create a method called isFinished(), here that checks os see if we are at the end of the quiz.
+//TODO create a reset() method here, that sets the questionNummer back to 0.

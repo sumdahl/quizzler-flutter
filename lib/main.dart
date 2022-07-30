@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:quizzler/quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 QuizBrain quizBrain = QuizBrain();
 
@@ -28,6 +29,49 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
+  List<Icon> scoreKeeper = [];
+  //checking answer
+  void checkAnswer(bool userPickedAnswer) {
+    setState(() {
+      bool correctAnswer = quizBrain.getCorrectAnswer();
+      if (userPickedAnswer == correctAnswer) {
+        scoreKeeper.add(Icon(
+          Icons.check,
+          color: Colors.green,
+        ));
+      } else {
+        scoreKeeper.add(Icon(
+          Icons.close,
+          color: Colors.red,
+        ));
+      }
+      quizBrain.nextQuestion();
+    });
+    if (quizBrain.isQuizFinished()) {
+      // scoreKeeper = []; // scoreKeeper.clear();
+      // quizBrain.reset();
+      Alert(
+        context: context,
+        type: AlertType.success,
+        title: "Quiz Finished",
+        buttons: [
+          DialogButton(
+            child: Text(
+              "COOL",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+            onPressed: () => Navigator.pop(context),
+            width: 110,
+          )
+        ],
+      ).show();
+      scoreKeeper = []; // scoreKeeper.clear();
+      quizBrain.reset();
+    }
+  }
+
+//TODO 1.use if/else to check if we've reached the end of the quiz, if so show an alert using iFlutter_alert , reset the questionNumber, empty out the scoreKeeper.
+  //TODO If we have no t reached the end, else do the answer checking steps below:
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +85,7 @@ class _QuizPageState extends State<QuizPage> {
             padding: EdgeInsets.all(10.0),
             child: Center(
               child: Text(
-               quizBrain.getQuestionText(),
+                quizBrain.getQuestionText(),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 25.0,
@@ -65,15 +109,7 @@ class _QuizPageState extends State<QuizPage> {
               style: TextButton.styleFrom(backgroundColor: Colors.green),
               //The user picked true
               onPressed: () {
-              bool correctAnswer = quizBrain.getCorrectAnswer();
-              if(correctAnswer == true){
-                print('You got it right');
-              } else {
-                print('You got it wrong');
-              }
-                setState(() {
-                  quizBrain.nextQuestion();
-                });
+                checkAnswer(true);
               },
             ),
           ),
@@ -92,23 +128,16 @@ class _QuizPageState extends State<QuizPage> {
               style: TextButton.styleFrom(
                 backgroundColor: Colors.red,
               ),
+              //the user click false
               onPressed: () {
-                bool correctAnswer = quizBrain.getCorrectAnswer();
-                if(correctAnswer == false){
-                  print('You got it right');
-                } else {
-                  print('You got it wrong');
-                }
-                setState(() {
-                  quizBrain.nextQuestion();
-                });
+                checkAnswer(false);
               },
             ),
           ),
         ),
-        // Row(
-        //   children: scoreKeeper,
-        // )
+        Row(
+          children: scoreKeeper,
+        )
       ],
     );
   }
