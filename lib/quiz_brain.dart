@@ -49,7 +49,10 @@ class QuizBrain {
   }
 
   bool isQuizFinished() {
-    return _questionNumber >= _questionBank.length - 1;
+    if (_questionNumber >= _questionBank.length - 1)
+      return true;
+    else
+      return false;
   }
 
   void reset() {

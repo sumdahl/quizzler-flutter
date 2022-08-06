@@ -32,42 +32,44 @@ class _QuizPageState extends State<QuizPage> {
   List<Icon> scoreKeeper = [];
   //checking answer
   void checkAnswer(bool userPickedAnswer) {
+    bool correctAnswer = quizBrain.getCorrectAnswer();
     setState(() {
-      bool correctAnswer = quizBrain.getCorrectAnswer();
-      if (userPickedAnswer == correctAnswer) {
-        scoreKeeper.add(Icon(
-          Icons.check,
-          color: Colors.green,
-        ));
+      if (quizBrain.isQuizFinished()) {
+        // scoreKeeper = []; // scoreKeeper.clear();
+        // quizBrain.reset();
+        Alert(
+          context: context,
+          type: AlertType.success,
+          title: "Quiz Finished",
+          buttons: [
+            DialogButton(
+              child: Text(
+                "Click here to play again",
+                style: TextStyle(color: Colors.white, fontSize: 20),
+              ),
+              onPressed: () => Navigator.pop(context),
+              width: 125,
+              height: 65,
+            )
+          ],
+        ).show();
+        quizBrain.reset();
+        scoreKeeper = []; // scoreKeeper.clear();
       } else {
-        scoreKeeper.add(Icon(
-          Icons.close,
-          color: Colors.red,
-        ));
+        if (userPickedAnswer == correctAnswer) {
+          scoreKeeper.add(Icon(
+            Icons.check,
+            color: Colors.green,
+          ));
+        } else {
+          scoreKeeper.add(Icon(
+            Icons.close,
+            color: Colors.red,
+          ));
+        }
+        quizBrain.nextQuestion();
       }
-      quizBrain.nextQuestion();
     });
-    if (quizBrain.isQuizFinished()) {
-      // scoreKeeper = []; // scoreKeeper.clear();
-      // quizBrain.reset();
-      Alert(
-        context: context,
-        type: AlertType.success,
-        title: "Quiz Finished",
-        buttons: [
-          DialogButton(
-            child: Text(
-              "COOL",
-              style: TextStyle(color: Colors.white, fontSize: 20),
-            ),
-            onPressed: () => Navigator.pop(context),
-            width: 110,
-          )
-        ],
-      ).show();
-      scoreKeeper = []; // scoreKeeper.clear();
-      quizBrain.reset();
-    }
   }
 
 //TODO 1.use if/else to check if we've reached the end of the quiz, if so show an alert using iFlutter_alert , reset the questionNumber, empty out the scoreKeeper.
@@ -142,9 +144,3 @@ class _QuizPageState extends State<QuizPage> {
     );
   }
 }
-
-/*
-question1: 'You can lead a cow down stairs but not up stairs.', false,
-question2: 'Approximately one quarter of human bones are in the feet.', true,
-question3: 'A slug\'s blood is green.', true,
-*/
